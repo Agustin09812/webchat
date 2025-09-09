@@ -1,6 +1,18 @@
 const textarea = document.getElementById('input');
 const input = document.getElementById('input');
 const sendBtn = document.getElementById('send');
+const chat = document.getElementById('chat'); // style - agus
+
+// ===== Viewport dinámico para Chrome/Firefox/iOS =====
+function setAppVh() {
+    const h = (window.visualViewport?.height || window.innerHeight) + 'px';
+    document.documentElement.style.setProperty('--app-vh', h);
+}
+setAppVh();
+window.addEventListener('resize', setAppVh);
+if (window.visualViewport) {
+    window.visualViewport.addEventListener('resize', setAppVh);
+}
 
 // === Auto-grow con altura mínima y reset ===
 const MIN_H = 45; // px
@@ -10,6 +22,15 @@ function autosize(el) {
 }
 autosize(textarea);
 textarea.addEventListener('input', function () { autosize(this); });
+// ===
+
+// style - agus
+function scrollBottom() {
+    chat.scrollTop = chat.scrollHeight;
+}
+textarea.addEventListener('focus', scrollBottom);
+textarea.addEventListener('input', scrollBottom);
+// ===
 
 async function sendMessage() {
     const msg = input.value.trim();

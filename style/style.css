@@ -1,11 +1,26 @@
+/* =========================
+   BASE + VARIABLES
+   ========================= */
+
 :root {
+    /* Alto de viewport dinámico:
+     - si JS setea --app-vh, se usa
+     - si no, cae a --vh (100dvh)
+     - último fallback: 100dvh */
+    --app-vh: 100dvh;
     --vh: 100dvh;
-    /* fallback natural */
 }
 
+/* iOS: evita auto-escalado de tipografías */
 html {
     -webkit-text-size-adjust: 100%;
-    /* iOS: evita auto-escalado de tipografías */
+}
+
+/* Box-sizing universal */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
 }
 
 html,
@@ -13,55 +28,75 @@ body {
     height: 100%;
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
-    touch-action: manipulation;
-    /* Scroll suave y bloqueo de double-tap-zoom gestual */
 }
 
 body {
     font-family: Arial, sans-serif;
     background: #ece5dd;
-    height: 100vh;
-    width: 100vw;
+
+    /* Usá el alto real del viewport (sin cortar el botón) */
+    min-height: var(--app-vh, var(--vh, 100dvh));
+
+    /* Evita overflow horizontal por 100vw + scrollbars */
+    width: 100%;
+
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+
+    /* Mejor gesto tap en mobile (menos zoom fantasma) */
+    touch-action: manipulation;
 }
+
+/* =========================
+   LAYOUT
+   ========================= */
 
 #container {
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
     align-items: center;
-    height: 90vh;
-    width: 100vw;
+
+    /* Alto total disponible */
+    height: var(--app-vh, var(--vh, 100dvh));
+    width: 100%;
 }
 
+/* El chat ocupa todo el espacio libre y scrollea */
 #chat {
     width: 100%;
     max-width: 500px;
-    height: 70vh;
+
+    /* FLEX MAGIC: ocupa resto de la columna */
+    flex: 1 1 auto;
+    min-height: 0;
+    /* clave para permitir scroll en flex */
+    overflow-y: auto;
+
     background-color: #efe6dd;
     background-image: url("https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png");
     background-repeat: repeat;
     background-size: contain;
+
     padding: 15px;
     border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-    overflow-y: auto;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, .2);
     margin: 0 auto 10px auto;
+
     display: flex;
     flex-direction: column;
+
+    /* Momentum scroll en iOS */
     -webkit-overflow-scrolling: touch;
-    /* Momentum scroll en iOS dentro del chat */
+
+    /* Scrollbar (Firefox) */
     scrollbar-width: thin;
-    /* Firefox */
-    scrollbar-color: rgba(0, 0, 0, 0.15) transparent;
-    /* Firefox */
+    scrollbar-color: rgba(0, 0, 0, .15) transparent;
 }
 
-/* Scrollbar estilo WhatsApp */
+/* Scrollbar estilo WhatsApp (WebKit) */
 #chat::-webkit-scrollbar {
     width: 6px;
 }
@@ -71,14 +106,122 @@ body {
 }
 
 #chat::-webkit-scrollbar-thumb {
-    background-color: rgba(0, 0, 0, 0.15);
+    background-color: rgba(0, 0, 0, .15);
     border-radius: 3px;
 }
 
 #chat::-webkit-scrollbar-thumb:hover {
-    background-color: rgba(0, 0, 0, 0.3);
+    background-color: rgba(0, 0, 0, .3);
 }
 
+/* Fila inferior: siempre visible, sin desbordes */
+#inputRow {
+    position: sticky;
+    /* pega al fondo dentro del container */
+    bottom: 0;
+    left: 0;
+    right: 0;
+
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    width: 100%;
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 8px 10px calc(8px + env(safe-area-inset-bottom));
+
+    background: rgba(236, 229, 221, .85);
+    backdrop-filter: blur(3px);
+}
+
+/* =========================
+   CONTROLES
+   ========================= */
+
+#input,
+#send {
+    padding: 14px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    font-size: 1.1em;
+}
+
+#input {
+    flex: 1 1 auto;
+    min-width: 0;
+    /* SUPER clave: evita que empuje al botón */
+    min-height: 45px;
+    max-height: 120px;
+
+    padding: 10px 14px;
+    border-radius: 50px;
+    border: 1px solid #fff;
+    background: #fff;
+
+    resize: none;
+    overflow-y: auto;
+
+    line-height: 1.4;
+    font-size: 16px;
+    /* anti-zoom iOS */
+    color: #111;
+
+    transition: none;
+}
+
+#input:focus {
+    border: 1px solid #fff;
+    outline: none;
+    box-shadow: none;
+}
+
+#input::placeholder {
+    color: #999;
+}
+
+/* Botón de envío con tamaño fijo dentro del flex */
+#send {
+    flex: 0 0 48px;
+    width: 48px;
+    height: 48px;
+    min-width: 48px;
+    min-height: 48px;
+
+    background: #25d366;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#send:hover {
+    background: #128c7e;
+}
+
+#send::before {
+    content: "";
+    display: block;
+    width: 20px;
+    height: 20px;
+    background: url('https://www.iconpacks.net/icons/2/free-icon-send-4008.png') no-repeat center;
+    background-size: contain;
+}
+
+/* Tipografías de controles a 16px para evitar zoom en focus */
+input,
+textarea,
+select,
+button {
+    font-size: 16px;
+}
+
+/* =========================
+   BURBUJAS
+   ========================= */
 
 #chat .msg {
     display: inline-block;
@@ -111,137 +254,52 @@ body {
     border-top-right-radius: 6px;
 }
 
-#input,
-#send {
-    padding: 14px;
-    border-radius: 8px;
-    border: 1px solid #ccc;
-    font-size: 1.1em;
-}
-
-#input {
-    flex: 1;
-    min-height: 45px;
-    max-height: 120px;
-    padding: 10px 14px;
-    border-radius: 50px;
-    border: 1px solid #fff;
-    background: #fff;
-    resize: none;
-    overflow-y: auto;
-    line-height: 1.4;
-    font-size: 1em;
-    color: #111;
-    box-sizing: border-box;
-    transition: none;
-}
-
-#input:focus {
-    border: 1px solid #fff;
-    outline: none;
-    box-shadow: none;
-}
-
-#input::placeholder {
-    color: #999;
-}
-
-#send {
-    width: 45px;
-    height: 45px;
-    min-width: 45px;
-    min-height: 45px;
-    background: #25d366;
-    border: none;
-    border-radius: 50%;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-#send:hover {
-    background: #128c7e;
-}
-
-#send::before {
-    content: "";
-    display: block;
-    width: 20px;
-    height: 20px;
-    background: url('https://www.iconpacks.net/icons/2/free-icon-send-4008.png') no-repeat center;
-    background-size: contain;
-}
-
-#inputRow {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    width: 100%;
-    max-width: 500px;
-    margin: 0 auto;
-}
-
-input,
-textarea,
-select,
-button {
-    font-size: 16px;
-}
-
-/* ========================= */
-/*        RESPONSIVE         */
-/* ========================= */
+/* =========================
+   RESPONSIVE
+   ========================= */
 
 /* Mobile ≤600px */
 @media (max-width: 600px) {
 
-    /* Usá el viewport dinámico para que no “salte” al abrir teclado */
+    /* El container ya usa var(--app-vh); solo ajustamos spacing */
     #container {
-        height: var(--vh);
         justify-content: space-between;
     }
 
-    /* Chat más grande y legible en pantallas chicas */
     #chat {
         max-width: 100%;
         border-radius: 0;
-        /* Altura = alto total - alto aprox. del inputRow */
-        height: calc(var(--vh) - 96px);
         padding: 14px;
         background-size: 340px 340px;
+        margin: 0;
+        /* quita margen que podía cortar el botón */
     }
 
-    /* Burbuja más grande */
     #chat .msg {
         max-width: 88%;
         font-size: 16px;
-        /* sube a 16px */
+        /* más legible */
         line-height: 1.45;
         padding: 10px 14px;
     }
 
-    /* Barra inferior más cómoda */
     #inputRow {
         max-width: 100%;
-        padding: 10px 12px calc(10px + env(safe-area-inset-bottom));
         gap: 12px;
-        background: rgba(236, 229, 221, 0.85);
-        backdrop-filter: blur(3px);
+        padding: 10px 12px calc(10px + env(safe-area-inset-bottom));
     }
 
-    /* Textarea sin zoom + cómodo para pulgar */
     #input {
         min-height: 48px;
         max-height: 120px;
         font-size: 16px;
-        /* clave anti-zoom iOS */
+        /* anti-zoom iOS */
         line-height: 1.45;
         padding: 12px 16px;
     }
 
-    /* Botón un toque más grande */
     #send {
+        flex-basis: 52px;
         width: 52px;
         height: 52px;
         min-width: 52px;
@@ -249,23 +307,16 @@ button {
     }
 }
 
-
 /* Pantallas muy bajas en altura */
 @media (max-height: 560px) {
-    #container {
-        height: var(--vh);
-    }
 
-    #chat {
-        height: calc(var(--vh) - 88px);
-    }
-
+    /* el flex se encarga del alto; evitamos fijar alturas que corten el botón */
     #input {
         max-height: 96px;
     }
 }
 
-/* 768px */
+/* ≥768px */
 @media (min-width: 768px) {
     #chat {
         max-width: 640px;
@@ -280,7 +331,7 @@ button {
     }
 }
 
-/* 1200px */
+/* ≥1200px */
 @media (min-width: 1200px) {
     #chat {
         max-width: 720px;
