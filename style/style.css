@@ -1,264 +1,293 @@
- html,
- body {
-     height: 100%;
-     margin: 0;
-     padding: 0;
-     box-sizing: border-box;
- }
+:root {
+    --vh: 100dvh;
+    /* fallback natural */
+}
 
- body {
-     font-family: Arial, sans-serif;
-     background: #ece5dd;
-     height: 100vh;
-     width: 100vw;
-     display: flex;
-     flex-direction: column;
-     justify-content: center;
-     align-items: center;
- }
+html {
+    -webkit-text-size-adjust: 100%;
+    /* iOS: evita auto-escalado de tipografías */
+}
 
- #container {
-     display: flex;
-     flex-direction: column;
-     justify-content: flex-end;
-     align-items: center;
-     height: 90vh;
-     width: 100vw;
- }
+html,
+body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    touch-action: manipulation;
+    /* Scroll suave y bloqueo de double-tap-zoom gestual */
+}
 
- #chat {
-     width: 100%;
-     max-width: 500px;
-     height: 70vh;
-     background-color: #efe6dd;
-     background-image: url("https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png");
-     background-repeat: repeat;
-     background-size: contain;
-     padding: 15px;
-     border-radius: 8px;
-     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-     overflow-y: auto;
-     margin: 0 auto 10px auto;
-     display: flex;
-     flex-direction: column;
- }
+body {
+    font-family: Arial, sans-serif;
+    background: #ece5dd;
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+#container {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
+    height: 90vh;
+    width: 100vw;
+}
+
+#chat {
+    width: 100%;
+    max-width: 500px;
+    height: 70vh;
+    background-color: #efe6dd;
+    background-image: url("https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png");
+    background-repeat: repeat;
+    background-size: contain;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    overflow-y: auto;
+    margin: 0 auto 10px auto;
+    display: flex;
+    flex-direction: column;
+    -webkit-overflow-scrolling: touch;
+    /* Momentum scroll en iOS dentro del chat */
+    scrollbar-width: thin;
+    /* Firefox */
+    scrollbar-color: rgba(0, 0, 0, 0.15) transparent;
+    /* Firefox */
+}
+
+/* Scrollbar estilo WhatsApp */
+#chat::-webkit-scrollbar {
+    width: 6px;
+}
+
+#chat::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+#chat::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.15);
+    border-radius: 3px;
+}
+
+#chat::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(0, 0, 0, 0.3);
+}
 
 
- #chat .msg {
-     display: inline-block;
-     width: fit-content;
-     max-width: 78%;
-     padding: 9px 12px;
-     margin: 6px 0;
-     border-radius: 18px;
-     line-height: 1.35;
-     font-size: 15px;
-     word-break: break-word;
-     white-space: pre-wrap;
-     box-shadow: 0 1px 1px rgba(0, 0, 0, .25);
-     color: #e9edef;
- }
+#chat .msg {
+    display: inline-block;
+    width: fit-content;
+    max-width: 78%;
+    padding: 9px 12px;
+    margin: 6px 0;
+    border-radius: 18px;
+    line-height: 1.35;
+    font-size: 15px;
+    word-break: break-word;
+    white-space: pre-wrap;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, .25);
+    color: #e9edef;
+}
 
- .bot {
-     background: #202c33;
-     margin-right: auto;
-     align-self: flex-start;
-     text-align: left;
-     border-top-left-radius: 6px;
- }
+.bot {
+    background: #202c33;
+    margin-right: auto;
+    align-self: flex-start;
+    text-align: left;
+    border-top-left-radius: 6px;
+}
 
- .user {
-     background: #005c4b;
-     margin-left: auto;
-     align-self: flex-end;
-     text-align: left;
-     border-top-right-radius: 6px;
- }
+.user {
+    background: #005c4b;
+    margin-left: auto;
+    align-self: flex-end;
+    text-align: left;
+    border-top-right-radius: 6px;
+}
 
- #input,
- #send {
-     padding: 14px;
-     border-radius: 8px;
-     border: 1px solid #ccc;
-     font-size: 1.1em;
- }
+#input,
+#send {
+    padding: 14px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    font-size: 1.1em;
+}
 
- #input {
-     flex: 1;
-     min-height: 45px;
-     max-height: 120px;
-     padding: 10px 14px;
-     border-radius: 50px;
-     border: 1px solid #fff;
-     background: #fff;
-     resize: none;
-     overflow-y: auto;
-     line-height: 1.4;
-     font-size: 1em;
-     color: #111;
-     box-sizing: border-box;
-     transition: none;
- }
+#input {
+    flex: 1;
+    min-height: 45px;
+    max-height: 120px;
+    padding: 10px 14px;
+    border-radius: 50px;
+    border: 1px solid #fff;
+    background: #fff;
+    resize: none;
+    overflow-y: auto;
+    line-height: 1.4;
+    font-size: 1em;
+    color: #111;
+    box-sizing: border-box;
+    transition: none;
+}
 
- #input:focus {
-     border: 1px solid #fff;
-     outline: none;
-     box-shadow: none;
- }
+#input:focus {
+    border: 1px solid #fff;
+    outline: none;
+    box-shadow: none;
+}
 
- #input::placeholder {
-     color: #999;
- }
+#input::placeholder {
+    color: #999;
+}
 
- #send {
-     width: 45px;
-     height: 45px;
-     min-width: 45px;
-     min-height: 45px;
-     background: #25d366;
-     border: none;
-     border-radius: 50%;
-     cursor: pointer;
-     display: flex;
-     align-items: center;
-     justify-content: center;
- }
+#send {
+    width: 45px;
+    height: 45px;
+    min-width: 45px;
+    min-height: 45px;
+    background: #25d366;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
 
- #send:hover {
-     background: #128c7e;
- }
+#send:hover {
+    background: #128c7e;
+}
 
- #send::before {
-     content: "";
-     display: block;
-     width: 20px;
-     height: 20px;
-     background: url('https://www.iconpacks.net/icons/2/free-icon-send-4008.png') no-repeat center;
-     background-size: contain;
- }
+#send::before {
+    content: "";
+    display: block;
+    width: 20px;
+    height: 20px;
+    background: url('https://www.iconpacks.net/icons/2/free-icon-send-4008.png') no-repeat center;
+    background-size: contain;
+}
 
- #inputRow {
-     display: flex;
-     align-items: center;
-     gap: 8px;
-     width: 100%;
-     max-width: 500px;
-     margin: 0 auto;
- }
+#inputRow {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    max-width: 500px;
+    margin: 0 auto;
+}
 
- /* Scrollbar estilo WhatsApp */
- #chat::-webkit-scrollbar {
-     width: 6px;
- }
+input,
+textarea,
+select,
+button {
+    font-size: 16px;
+}
 
- #chat::-webkit-scrollbar-track {
-     background: transparent;
- }
+/* ========================= */
+/*        RESPONSIVE         */
+/* ========================= */
 
- #chat::-webkit-scrollbar-thumb {
-     background-color: rgba(0, 0, 0, 0.15);
-     border-radius: 3px;
- }
+/* Mobile ≤600px */
+@media (max-width: 600px) {
 
- #chat::-webkit-scrollbar-thumb:hover {
-     background-color: rgba(0, 0, 0, 0.3);
- }
+    /* Usá el viewport dinámico para que no “salte” al abrir teclado */
+    #container {
+        height: var(--vh);
+        justify-content: space-between;
+    }
 
- /* Firefox */
- #chat {
-     scrollbar-width: thin;
-     scrollbar-color: rgba(0, 0, 0, 0.15) transparent;
- }
+    /* Chat más grande y legible en pantallas chicas */
+    #chat {
+        max-width: 100%;
+        border-radius: 0;
+        /* Altura = alto total - alto aprox. del inputRow */
+        height: calc(var(--vh) - 96px);
+        padding: 14px;
+        background-size: 340px 340px;
+    }
 
- /* ========================= */
- /*        RESPONSIVE         */
- /* ========================= */
+    /* Burbuja más grande */
+    #chat .msg {
+        max-width: 88%;
+        font-size: 16px;
+        /* sube a 16px */
+        line-height: 1.45;
+        padding: 10px 14px;
+    }
 
- /* 600px */
- @media (max-width: 600px) {
-     body {
-         justify-content: flex-start;
-     }
+    /* Barra inferior más cómoda */
+    #inputRow {
+        max-width: 100%;
+        padding: 10px 12px calc(10px + env(safe-area-inset-bottom));
+        gap: 12px;
+        background: rgba(236, 229, 221, 0.85);
+        backdrop-filter: blur(3px);
+    }
 
-     #container {
-         height: 100vh;
-         justify-content: space-between;
-     }
+    /* Textarea sin zoom + cómodo para pulgar */
+    #input {
+        min-height: 48px;
+        max-height: 120px;
+        font-size: 16px;
+        /* clave anti-zoom iOS */
+        line-height: 1.45;
+        padding: 12px 16px;
+    }
 
-     #chat {
-         max-width: 100%;
-         border-radius: 0;
-         height: calc(100vh - 95px);
-         padding: 12px;
-         background-size: 320px 320px;
-     }
+    /* Botón un toque más grande */
+    #send {
+        width: 52px;
+        height: 52px;
+        min-width: 52px;
+        min-height: 52px;
+    }
+}
 
-     #inputRow {
-         max-width: 100%;
-         padding: 8px 10px;
-         gap: 10px;
-         background: rgba(236, 229, 221, 0.75);
-         backdrop-filter: blur(2px);
-     }
 
-     #input {
-         min-height: 44px;
-         font-size: 16px;
-         padding: 10px 14px;
-     }
+/* Pantallas muy bajas en altura */
+@media (max-height: 560px) {
+    #container {
+        height: var(--vh);
+    }
 
-     #send {
-         width: 48px;
-         height: 48px;
-         min-width: 48px;
-         min-height: 48px;
-     }
+    #chat {
+        height: calc(var(--vh) - 88px);
+    }
 
-     #chat .msg {
-         max-width: 85%;
-         font-size: 14.5px;
-     }
- }
+    #input {
+        max-height: 96px;
+    }
+}
 
- /* 560px */
- @media (max-height: 560px) {
-     #container {
-         height: 100vh;
-     }
+/* 768px */
+@media (min-width: 768px) {
+    #chat {
+        max-width: 640px;
+    }
 
-     #chat {
-         height: calc(100vh - 85px);
-         padding: 10px;
-     }
+    #inputRow {
+        max-width: 640px;
+    }
 
-     #input {
-         max-height: 96px;
-     }
- }
+    #chat .msg {
+        max-width: 72%;
+    }
+}
 
- /* 768px */
- @media (min-width: 768px) {
-     #chat {
-         max-width: 640px;
-     }
+/* 1200px */
+@media (min-width: 1200px) {
+    #chat {
+        max-width: 720px;
+        background-size: 420px 420px;
+    }
 
-     #inputRow {
-         max-width: 640px;
-     }
-
-     #chat .msg {
-         max-width: 72%;
-     }
- }
-
- /* 1200px */
- @media (min-width: 1200px) {
-     #chat {
-         max-width: 720px;
-         background-size: 420px 420px;
-     }
-
-     #inputRow {
-         max-width: 720px;
-     }
- }
+    #inputRow {
+        max-width: 720px;
+    }
+}
