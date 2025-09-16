@@ -10,6 +10,7 @@
 </head>
 
 <body>
+    <audio id="msgReceivedAudio" src="assets/msgReceived.mp3" style="display:none"></audio>
     <div id="container">
         <div id="header">
             <button id="backBtn" aria-label="Volver a la página principal">←</button>
@@ -17,7 +18,7 @@
                 src="https://img.freepik.com/vector-gratis/robot-vectorial-graident-ai_78370-4114.jpg?semt=ais_hybrid&w=740&q=80"
                 alt="Bot" /> <!-- Cambiar imagen -->
             <div class="meta">
-                <div class="name">Asistente demo</div>
+                <div class="name" id="assistantName">Cargando...</div>
                 <div class="sub">en línea</div>
             </div>
         </div>
@@ -30,6 +31,6 @@
 </body>
 
 <!-- script file -->
-<script src="js/main.js"></script>
+<script src="/js/main.js"></script>
 
 </html>

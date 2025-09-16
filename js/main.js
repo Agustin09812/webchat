@@ -1,3 +1,14 @@
+// Obtener el nombre del asistente dinámicamente y actualizar el div
+window.addEventListener('DOMContentLoaded', function() {
+    fetch('/api/assistant-name')
+        .then(res => res.json())
+        .then(data => {
+            var el = document.getElementById('assistantName');
+            if (el && data.name) {
+                el.textContent = data.name;
+            }
+        });
+});
 const textarea = document.getElementById('input')
 const input = document.getElementById('input')
 const sendBtn = document.getElementById('send')
@@ -143,4 +154,18 @@ function addMessage(text, type) {
     div.innerText = text
     chat.appendChild(div)
     chat.scrollTop = chat.scrollHeight
+
+    // Reproducir sonido si es respuesta del bot
+    if (type === 'bot') {
+        let audio = document.getElementById('msgReceivedAudio');
+        if (!audio) {
+            audio = document.createElement('audio');
+            audio.id = 'msgReceivedAudio';
+            audio.src = 'assets/msgReceived.mp3';
+            audio.style.display = 'none';
+            document.body.appendChild(audio);
+        }
+        audio.currentTime = 0;
+        audio.play();
+    }
 }
